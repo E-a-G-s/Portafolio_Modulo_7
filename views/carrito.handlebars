@@ -1,0 +1,209 @@
+
+<section class="container mt-5"> 
+  <h2>Carrito de compra</h2>
+      <section class="row mt-5 text-center">
+  <table class="table" style="color: #fff;">
+  <thead >
+    <tr>
+      
+      <th scope="col">Nombre Producto</th>
+      <th scope="col">Total Precio Producto</th>
+      <th scope="col">Cantidad</th>
+    </tr>
+  </thead>
+         <tbody class="text-center border-danger" id="carritoCargado"> 
+  </tbody>
+</table>
+
+
+    </section>
+</section>
+<section class="container text-center d-flex justify-content-center">
+ 
+      <form id="formulario">
+      <div class="card text-bg-dark border-danger mb-3 text-danger"  style="max-width: 18rem;">
+        <div class="card-header">RESUMEN DE VENTA</div>
+        <hr>
+        <h5 class="card-title">  Cantidad de Productos</h5>
+      <label id="cantidadVenta"></label>
+        <h5 class="card-title"> Total de la venta</h5>
+        <label id="totalVenta"></label>
+        <div class="card-body ">
+          <h5 class="card-title">Productos</h5>
+          <label id="nombreProductoVenta"></label>
+             <button class= "btn btn-outline-success mt-5" >Comprar</button>
+        </div>
+      </div>
+
+        </form>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+//GET PRODUCTOS
+fetch('http://localhost:3000/carrito', )
+  .then(response => response.json())
+  .then(response =>{getCarrito(response)
+           
+  })
+  .catch(err => console.error(err));
+
+  const getCarrito=(data)=>{
+    //actualizarProductosVenta(data);
+    venta(data)
+
+
+ 
+
+   let elementos=""
+    data.forEach((product)=>{
+      
+   elementos+=
+`
+  <tr >
+     <td >${product.nombreProducto}</td>
+      <td> ${product.precioProducto}</td>
+       <td>${product.cantidad}</td>
+     <td><button class="btn btn-outline-danger" onclick="eliminarProductoCarrito('${product.id}')">Quitar</button></td>
+              
+  </tr>
+ 
+`
+
+
+    })
+       document.getElementById("carritoCargado").innerHTML=elementos
+
+
+  
+  }
+ ////////////////ELIMINANDO
+const eliminarProductoCarrito=(id)=>{
+            const options = { method: 'DELETE' };
+  fetch('http://localhost:3000/carrito/' + id, options)
+    .then(response => response.json())
+    .then(response => (response))
+  Swal.fire('Eliminando Producto del carrito',
+    ``,
+    'error').then(response => location.reload())
+    .catch(err => console.error(err));
+            
+}
+////////////////////////////////////////////////////
+/*
+ function actualizarProductosVenta(data){
+      const formulario = document.getElementById("formulario")
+   
+ formulario.addEventListener("submit", (event) => {
+        event.preventDefault();
+       const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        let nuevoProducto=[]
+         data.map((producto) => {
+       datos={
+          id: producto.idProducto,
+          nombre: producto.nombreProducto,
+          descripcion: producto.descripcion,
+          stock:  (producto.stockProducto - producto.cantidad),
+          precio: (producto.precioProducto/producto.cantidad),
+          imagen: producto.imagen
+ 	            
+        }
+
+        nuevoProducto.push(datos)
+ })
+        console.log(nuevoProducto)
+       
+        fetch("http://localhost:3000/productos/actualizar", {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(nuevoProducto),
+            redirect: "follow"
+        })
+  .then(response => response.json())
+  .then(response =>console.log(response))
+  .catch(err => console.log(err));
+         
+        
+        
+    })
+
+
+
+ }
+*/
+
+///////////////////////////////////////////
+////////////////////////SE HACE LA VENTA
+  function venta(data) {
+      console.log(data.length)
+      if (data.length < 1) {
+        formulario.addEventListener("click", (event) => {
+          event.preventDefault()
+          Swal.fire('DEBE AGREGAR PRODUCTOS AL CARRO',
+            '',
+            'error').then(response => location.reload())
+
+            ;
+        })
+      } else {
+        const carritoContenedor = document.getElementById("carritoContenedor")
+        const cantidadVenta = document.getElementById("cantidadVenta").innerHTML = (data.map(item => item.cantidad).reduce((prev, curr) => prev + curr, 0))
+        const totalVenta = document.getElementById("totalVenta").innerHTML = (data.map(item => item.precioProducto).reduce((prev, curr) => prev + curr, 0))
+        const nombreProductoVenta = document.getElementById("nombreProductoVenta").innerHTML = (data.map(item => item.nombreProducto))
+        carritoContenedor.textContent = cantidadVenta
+
+        const formulario = document.getElementById("formulario")
+        formulario.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const headers = new Headers();
+          headers.append("Content-Type", "application/json");
+
+          let nuevaVenta = {
+            total: totalVenta,
+            productos: nombreProductoVenta,
+            cantidad: cantidadVenta
+          }
+
+          fetch("http://localhost:3000/venta", {
+            method: "post",
+            headers,
+            body: JSON.stringify(nuevaVenta),
+            redirect: "follow"
+          })
+            .then(response => response.json())
+            .then(response =>  console.log(response))
+         
+          Swal.fire(
+            'PRODUCTO COMPRADO!',
+            '¡¡¡ Felicidades por tu compra !!!',
+            'success'
+          ).then(response => location.reload())
+              eliminarProducto()
+            .catch(err => console.log(err));
+
+
+        })
+      }
+   
+
+    }
+    ////SE VACIA EL CARRO
+    function eliminarProducto() {
+
+      const options = { method: 'DELETE' };
+
+      fetch('http://localhost:3000/borrar/carrito', options)
+        .then(response => response.json())
+        .then(response => (response))
+        .catch(err => console.error(err));
+
+    }
+
+ 
+
+
+
+
+
+</script>

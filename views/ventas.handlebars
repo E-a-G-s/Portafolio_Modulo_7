@@ -1,0 +1,76 @@
+<section class="container text-center mt-5"  >
+<h2>VENTAS</h2>
+<div class="row justify-content-center">
+
+<div class="col align-self-center">
+
+
+<table class="table table-bordered border-danger table-striped" style="color: #fff;">
+  <thead>
+    <tr>
+      <th scope="col">ID Venta</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Total de Compra</th>
+      <th scope="col">Cantidad</th>
+      <th scope="col">Nombre Producto</th>
+   
+     
+     </tr>
+ 
+  </thead>
+   <tbody class="text-center border-danger table-dark" id="VentasCargadas">
+    
+   </tbody>
+     
+</table>
+ 
+</div>
+
+</div>
+
+
+</section>
+
+
+
+  <script >
+  
+
+fetch("http://localhost:3000/venta", )
+  .then(response => response.json())
+  .then(response =>{getVentas(response)
+  console.log(response)
+                 
+  })
+  .catch(err => console.error(err));
+
+
+  const getVentas=(data)=>{
+    
+   let elementos=""
+    data.forEach((product)=>{
+     
+   elementos+=
+`
+                <tr >
+                    <td >${product.id}</td>
+                    <td>${product.fecha}</td>
+                    <td>${product.total}</td>
+                    <td>${product.cantidad}</td>
+                      <td>${product.productos}</td>
+               
+           
+                </tr>
+                            
+`
+               
+    })
+       document.getElementById("VentasCargadas").innerHTML=elementos
+  }
+
+  </script>
+   
+
+
+ 
+
