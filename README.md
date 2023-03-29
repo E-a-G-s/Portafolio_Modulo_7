@@ -1,6 +1,6 @@
 # Entrega Portafolio Modulo 7
 
-## Cuenta de Github:
+## Cuenta de Github: https://github.com/E-a-G-s/Portafolio_Modulo_7
 
 ## LINK GITHUB PAGES
 
@@ -22,3 +22,4 @@ Se realizo un carrito de compras con javascript, realizando todo el backend con 
 Se realiza un inventario donde se puede agregar, eliminar, actualizar los productos del eccomerce.
 
 Para poder descargar y probar el proyecto, realizar en el directorio del proyecto npm install y ejecutar con npm run dev
+-Crear la base de datos: Portafolio_m7
